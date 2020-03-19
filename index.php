@@ -12,8 +12,8 @@
     <body>
         <h1 class="header">Online Paper Maker</h1>
         <form class="form_login" method="POST">
-            <input class="email" name="email" type="email" placeholder="Enter your email">
-            <input class="pwd" name="pwd" type="password" placeholder="Enter Password"><br/>
+            <input class="email" name="email" type="email" placeholder="Enter your email" value="sample@gmail.com">
+            <input class="pwd" name="pwd" type="password" placeholder="Enter Password" value="1234"><br/>
             <input class="login_btn" type="submit" name="login" value="Login">
         </form><br/>
         <div class="msg"></div>

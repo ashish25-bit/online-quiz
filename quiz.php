@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+    *{margin:0;padding:0;}
+    .start{text-align:center;}
+    .quiz_start{cursor:pointer;}
+    .quiz_con{width:100%;}
+    .ques_con,.pagination{background:#ccc;width:80%;margin:20px auto;padding:10px;}
+    .pagination{background:white;text-align:center;}
+    .ques{margin:10px 0;font-size:18px;}
+    .option{margin:10px 0;cursor:pointer;}
+    .title{text-align:center;font-size:20px;margin:10px;}
+    .page_con{list-style:none;}
+    .page_con li{display:inline-block;background:#ccc;margin:0 5px;padding:10px 15px;border-radius:50%;cursor:pointer;}
+    </style>
+</head>
+<body>
+    <?php require 'header.php' ; $id = $_GET['id']?>
+
+    <?php 
+        $q_name = "SELECT Title FROM `exam_det` WHERE UniqueId = '$id'";
+        $rn = mysqli_query($conn,$q_name);
+        $title = mysqli_fetch_assoc($rn);
+        echo '<p class="title">' . $title['Title'] . '</p>';
+    ?>
+
+    <div class="start">
+        <button class="quiz_start">Start The quiz</button>
+    </div>
+
+    <?php
+        $qid = [];
+        $query = "SELECT Id FROM $id";
+        if($r = mysqli_query($conn,$query)){
+            while($row = mysqli_fetch_assoc($r))
+                array_push($qid, $row['Id']);
+        }
+        else
+            echo mysqli_query($conn);
+    ?>
+
+    <div class="quiz_con">
+        <div class="ques_con">
+            <?php
+                $query = "SELECT Ques,Option1,Option2,Option3,Option4 FROM `$id` WHERE Id = $qid[0]";
+                if($res = mysqli_query($conn, $query)){
+                    $row = mysqli_fetch_assoc($res);
+                    echo '<p class="ques">' . $row['Ques'] .'</p>';
+                    echo '<input type="radio" class="option" name="option" value="' . $row['Option1'] .'">'.$row['Option1'].'<br/>';
+                    echo '<input type="radio" class="option" name="option" value="' . $row['Option2'] .'">'.$row['Option2'].'<br/>';
+                    echo '<input type="radio" class="option" name="option" value="' . $row['Option3'] .'">'.$row['Option3'].'<br/>';
+                    echo '<input type="radio" class="option" name="option" value="' . $row['Option4'] .'">'.$row['Option4'];
+                }
+            ?>
+        </div>
+        <div class="pagination">
+            <?php
+                echo '<ul class="page_con">';
+                for($i=1;$i<=count($qid);$i++)
+                    echo '<li>'.$i.'</li>';
+                echo '</ul>';
+            ?>
+        </div>
+    </div>
+
+    <script>
+        o = ['A' , 'B' , 'C' , 'D'] 
+        id = '<?php echo $id ?>'
+        l = '<?php echo count($qid) ?>'
+        qid = <?php echo json_encode($qid) ?>
+        
+        
+
+        {//document.querySelector('.quiz_con').style.display = 'none'
+            current_ques(0)
+        }
+
+        document.querySelector('.quiz_start').addEventListener('click' , () => {
+            if(window.XMLHttpRequest)
+                xmlhttp = new XMLHttpRequest()
+            else
+                xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
+            
+            xmlhttp.onreadystatechange = function(){
+                if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+                    console.log(xmlhttp.responseText)
+                }
+            }
+
+            xmlhttp.open('GET', `include/startquiz.php?id=${id}&l=${l}`, true)
+            xmlhttp.send()
+
+            document.querySelector('.start').style.display = 'none'
+            //document.querySelector('.quiz_con').style.display = 'block'
+        })
+
+        document.querySelectorAll('.page_con li').forEach((element,index) => {
+            element.addEventListener('click' , () => {
+                if(window.XMLHttpRequest)
+                    xmlhttp = new XMLHttpRequest()
+                else
+                    xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
+                xmlhttp.onreadystatechange = function(){
+                    if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        document.querySelector('.ques_con').innerHTML = xmlhttp.responseText
+                        current_ques(index)
+                    }
+                }
+                xmlhttp.open('GET', `include/get_ques.php?id=${id}&n=${qid[index]}`, true)
+                xmlhttp.send()
+            })
+        })
+
+        function current_ques(i){
+            document.querySelectorAll('.option').forEach((element,index) => {
+                element.addEventListener('click' , () => {
+                    if(window.XMLHttpRequest)
+                        xmlhttp = new XMLHttpRequest()
+                    else
+                        xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
+                    xmlhttp.onreadystatechange = function() {
+                        if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
+                            console.log(xmlhttp.responseText)
+                    }
+                    xmlhttp.open('GET' , `include/subans.php?id=${id}&n=${i}&o=${o[index]}`,true)
+                    xmlhttp.send()
+                })
+            }) 
+        }        
+         
+    </script>
+
+</body>
+</html>

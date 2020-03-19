@@ -12,6 +12,7 @@
     .key_enter,.deregsiter{padding:5px 6px;cursor:pointer;}
     .time{width:80%;background:#ccc;margin:10px auto;padding:10px;}
     .time p{padding:5px 6px;}
+    .quiz{cursor:pointer;}
 </style>
 <body>
     <?php require 'header.php' ; $id = $_GET['id']?>
@@ -98,23 +99,53 @@
             </script>";
         }
     ?>
-
+    
+    <!-- 
+    <div class="time"><p>No exam now ..</p></div>
+    -->
     <div class="time">
-        <p>Exams starts in : 
-        <?php
-        $q2 = "SELECT Date FROM exam_det WHERE UniqueId='$id'";
-        if($r = mysqli_query($conn,$q2)){
-            $row2 = mysqli_fetch_assoc($r);
-            $date = $row2['Date'];
-            $d = explode('-' , $date);
-            $d_c = $d[2] . '-' . $d[1] . '-' . $d[0];
-            $today = getdate();
-            echo $today['mday'] . '-' . $today['mon'] . '-' . $today['year'];
-        }
-        else echo mysqli_error($conn);
-        ?>
-        </p>
+        <p>Exam has started</p><button class="quiz">Attempt Quiz</button>
     </div>
+
+
+    <?php
+        $today = date("Y-m-d");
+        $tsd = explode('-', $today);
+        $date = $row['Date'];
+        $sd = explode('-', $date);
+        $time = $row['Time'];
+        $h = (int)substr($time,0,2);
+        $m = (int)substr($time,3,5);
+        $meri = substr($time,6,7);
+        $h = $meri == 'AM' ? $h : $h < 12 ? $h + 12 : $h;
+        $e = $h * 100 + $m;
+        $d = $row['Duration'];
+    ?>
+    
+    <script>
+
+    document.querySelector('.quiz').addEventListener('click' , () => location.replace('quiz.php?id=' + '<?php echo $id ?>'))
+
+    /*
+    exam_date = '<?php echo $date ?>'
+    curr_date = '<?php echo $today ?>'
+    exam_time = '<?php echo $e ?>'
+    duration = '<?php echo $d ?>'
+    form = '<p>Exam has started</p><button class="quiz">Attempt Quiz</button>'
+        
+    setInterval(() => {
+        d = new Date()
+        curr_time = d.getHours() * 100 + d.getMinutes()
+
+        if(exam_date === curr_date){
+            if( curr_time - exam_time >=0  && (curr_time - exam_time <= 30 || curr_time - exam_time <= 70) ){
+                document.querySelector('.time').innerHTML = form
+                document.querySelector('.quiz').addEventListener('click' , () => location.replace('quiz.php?id=' + '<?php echo $id ?>'))
+            }
+        }
+    },1000)
+    */
+    </script>
     
 </body>
 </html>
