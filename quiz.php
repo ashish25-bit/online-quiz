@@ -72,10 +72,21 @@
         id = '<?php echo $id ?>'
         l = '<?php echo count($qid) ?>'
         qid = <?php echo json_encode($qid) ?>
-        
-        
 
         {//document.querySelector('.quiz_con').style.display = 'none'
+            if(window.XMLHttpRequest)
+                xmlhttp = new XMLHttpRequest()
+            else 
+                xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
+            xmlhttp.onreadystatechange = function(){
+                if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+                    ans = xmlhttp.responseText
+                    sessionStorage.Ans = ans
+                }
+            }
+            xmlhttp.open('GET', `include/getans.php?id=${id}`)
+            xmlhttp.send()
+            
             current_ques(0)
         }
 
@@ -116,15 +127,35 @@
         })
 
         function current_ques(i){
-            document.querySelectorAll('.option').forEach((element,index) => {
+            options = document.querySelectorAll('.option')
+
+            selected = sessionStorage.Ans
+            ca = selected[i*2]
+
+            options.forEach((element,index) => {
+
+                if(ca != 'X') {
+                    if(ca == 'A')
+                        options[0].checked = true
+                    else if(ca == 'B')
+                        options[1].checked = true
+                    else if(ca == 'C')
+                        options[2].checked = true
+                    else if(ca == 'D')
+                        options[3].checked = true
+                }
+
                 element.addEventListener('click' , () => {
+
                     if(window.XMLHttpRequest)
                         xmlhttp = new XMLHttpRequest()
                     else
                         xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
                     xmlhttp.onreadystatechange = function() {
-                        if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
-                            console.log(xmlhttp.responseText)
+                        if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+                            ans = xmlhttp.responseText
+                            sessionStorage.Ans = ans
+                        }
                     }
                     xmlhttp.open('GET' , `include/subans.php?id=${id}&n=${i}&o=${o[index]}`,true)
                     xmlhttp.send()

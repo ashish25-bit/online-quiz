@@ -7,7 +7,7 @@
         .des_con{width:100%;background:#eee;}
         .title,.des_head{font-size:25px;}
         .id{font-size:18px;color:#aaa;}
-        .edit,.add_ques,.add,.edit_ques{margin:0 5px;font-size:15px; cursor:pointer;background:white;padding:6px 5px;}
+        .edit,.add_ques,.add,.edit_ques,.add_ans{margin:0 5px;font-size:15px; cursor:pointer;background:white;padding:6px 5px;}
         .add_ques,.add{display:none}
         .btn_con{width:80%;margin:10px auto;background:black;text-align:center;padding:10px;}
         .update_det{text-align:center;color:red;}
@@ -49,6 +49,7 @@
             <a class="add">Add Questions</a>
             <a class="add_ques">Add</a>
             <a class="edit_ques">Edit Questions</a>
+            <a class="add_ans">Add Answers</a>
             <?php $q = "SELECT State FROM exam_det WHERE UniqueId='$id'";
                 if(!mysqli_query($conn,$q))
                     echo mysqli_error($conn);
@@ -70,6 +71,7 @@
                 state = "<?php echo $r['State'] ?>"
                 if(state == 1){
                     document.querySelector(".add").style.display = "inline-block"
+                    document.querySelector(".add_ans").style.display = "inline-block"
                     document.querySelector(".edit_ques").style.display = "inline-block"
                     document.querySelector(".add_ques").style.display = "none"
                 }
@@ -78,6 +80,7 @@
                     document.querySelector(".add_ques").style.display = "inline-block"
                     document.querySelector(".add").style.display = "none"
                     document.querySelector(".edit_ques").style.display = "none"
+                    document.querySelector(".add_ans").style.display = "none"
                 }
                 document.querySelector(".hide").style.display = 'none'
             }
@@ -91,6 +94,9 @@
             })
             document.querySelector(".edit_ques").addEventListener("click" , () =>{
                 window.location = 'edit_ques.php?id='+"<?php echo $id ?>"
+            })
+            document.querySelector('.add_ans').addEventListener('click' , () => {
+                window.location = 'add_answer.php?id='+"<?php echo $id ?>"
             })
 
             document.querySelector(".show_token").addEventListener("click" , ()=>{

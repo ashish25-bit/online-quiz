@@ -4,7 +4,7 @@
         <title>Dashboard - Online Exam Maker</title>
         <style>*{margin:0;padding:0;}
             a{text-decoration:none;}
-            .quiz_det{width:90%;margin:3px auto;background:#ddd;padding:10px;height:70px;}
+            .quiz_det{width:90%;margin:3px auto;background:#ddd;padding:10px;height:90px;}
             .quiz_name{font-size:20px;cursor:pointer;}
             .uniqueId{font-size:16px;color:#aaa;display:inline;}
             .create{text-align:center;margin:40px;}
