@@ -19,6 +19,8 @@
                 <?php 
                     if($row_name['Category'] != 'Examinee')
                         echo '<div><a href="dashboard.php" class="home">Home</a> </div>';
+                    else 
+                        echo '<div><a href="examinee.php" class="home">Home</a> </div>';
                 ?>
             <div>
                 <form action="include/logout.php" method="POST">

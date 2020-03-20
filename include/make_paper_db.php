@@ -24,7 +24,8 @@ if(isset($_POST['submit'])){
             Email varchar(30) not null,
             Answers varchar(100) not null,
             Score int(10) not null,
-            timestamp TIMESTAMP NULL
+            timestamp TIMESTAMP NULL,
+            State int(1) not null
         )";
         if(mysqli_query($conn,$q))
             header("Location:../add_questions.php?id=$id");

@@ -9,10 +9,9 @@
     .register_con,.deregister_con{margin:10px auto;}
     .info_con p{font-size:20px;}
     .key_input{width:90%;margin:10px 0;padding:5px 6px;}
-    .key_enter,.deregsiter{padding:5px 6px;cursor:pointer;}
+    .key_enter,.deregsiter,.quiz{margin:0 5px;font-size:15px; cursor:pointer;background:white;padding:6px 5px;border:none;font-family: 'Poppins', sans-serif;}
     .time{width:80%;background:#ccc;margin:10px auto;padding:10px;}
     .time p{padding:5px 6px;}
-    .quiz{cursor:pointer;}
 </style>
 <body>
     <?php require 'header.php' ; $id = $_GET['id']?>
@@ -78,7 +77,7 @@
             echo "<script>
             let id = '$id'
             const key = document.querySelector('.key_input')
-            document.querySelector('.key_enter').addEventListener('click' , () =>{
+            document.querySelector('.key_enter').addEventListener('click' , () => {
                 if(key.value && !isNaN(key.value)){
                     if(window.XMLHttpRequest)
                     xmlhttp = new XMLHttpRequest()
@@ -103,10 +102,16 @@
     <!-- 
     <div class="time"><p>No exam now ..</p></div>
     -->
-    <div class="time">
-        <p>Exam has started</p><button class="quiz">Attempt Quiz</button>
-    </div>
-
+    <?php
+        $qq = "SELECT State FROM `$test` WHERE Email='$email'";
+        $rrr = mysqli_query($conn,$qq);
+        $roo = mysqli_fetch_assoc($rrr);
+        $s = $roo['State'];
+        if($roo['State'] == 0)
+            echo '<div class="time"><p>Exam has started</p><button class="quiz">Attempt Quiz</button></div>';
+        else 
+            echo '<div class="no_time_to_die">You have attempted the quiz</div>';
+    ?>
 
     <?php
         $today = date("Y-m-d");
@@ -126,24 +131,31 @@
 
     document.querySelector('.quiz').addEventListener('click' , () => location.replace('quiz.php?id=' + '<?php echo $id ?>'))
 
+    
+
     /*
     exam_date = '<?php echo $date ?>'
     curr_date = '<?php echo $today ?>'
     exam_time = '<?php echo $e ?>'
     duration = '<?php echo $d ?>'
+    state = '<?php echo $s ?>'
     form = '<p>Exam has started</p><button class="quiz">Attempt Quiz</button>'
-        
-    setInterval(() => {
-        d = new Date()
-        curr_time = d.getHours() * 100 + d.getMinutes()
 
-        if(exam_date === curr_date){
-            if( curr_time - exam_time >=0  && (curr_time - exam_time <= 30 || curr_time - exam_time <= 70) ){
-                document.querySelector('.time').innerHTML = form
-                document.querySelector('.quiz').addEventListener('click' , () => location.replace('quiz.php?id=' + '<?php echo $id ?>'))
-            }
+    {
+        if(state == 0){
+            setInterval(() => {
+                d = new Date()
+                curr_time = d.getHours() * 100 + d.getMinutes()
+
+                if(exam_date === curr_date) {
+                    if( curr_time - exam_time >=0  && (curr_time - exam_time <= 30 || curr_time - exam_time <= 70) ){
+                        document.querySelector('.time').innerHTML = form
+                        document.querySelector('.quiz').addEventListener('click' , () => location.replace('quiz.php?id=' + '<?php echo $id ?>'))
+                    }
+                }
+            },1000)
         }
-    },1000)
+    }    
     */
     </script>
     

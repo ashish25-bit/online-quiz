@@ -70,19 +70,6 @@
                 })
             })
 
-            key.addEventListener("keyup" , () => {
-                if(window.XMLHttpRequest)
-                    xmlhttp = new XMLHttpRequest()
-                else
-                    xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
-                xmlhttp.onreadystatechange = function(){
-                    if(xmlhttp.readyState == 4 && xmlhttp.status == 200)
-                        con.innerHTML = xmlhttp.responseText
-                } 
-                xmlhttp.open('GET', 'include/search_exam.php?key='+key.value, true)
-                xmlhttp.send()
-            })
-
             btn.addEventListener("click" , (event) => {
                 event.preventDefault()
                 if(key.value !== ""){

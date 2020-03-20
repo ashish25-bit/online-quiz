@@ -11,7 +11,7 @@ if($r = mysqli_query($conn,$query)){
     if((int)$row['Token'] === $key){
         $name = $row_name['Name'];
         $email = $row_name['Email'];
-        $q = "INSERT INTO $test (Name,Email,Answers,Score,timestamp) VALUES ('$name' , '$email' , '' , 0, null);";
+        $q = "INSERT INTO $test (Name,Email,Answers,Score,timestamp,State) VALUES ('$name' , '$email' , '' , 0, null,0);";
         if(mysqli_query($conn,$q)) echo 'You have registered for this exam successfully.';
         else echo mysqli_error($conn);
     }

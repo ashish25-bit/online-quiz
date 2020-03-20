@@ -11,7 +11,13 @@
         .add_ques,.add{display:none}
         .btn_con{width:80%;margin:10px auto;background:black;text-align:center;padding:10px;}
         .update_det{text-align:center;color:red;}
-        .show_con,.hide_con{display:inline-block;} </style>
+        .show_con,.hide_con{display:inline-block;}
+        table, th, td {border: 1px solid black;}
+        table {border-collapse: collapse;width:80%;margin:20px auto;}
+        th,td{padding:10px;}
+        th {text-align: left;}
+        .registered{width:100%;}
+        </style>
     </head>
     <body>
         <?php require 'header.php';?>
@@ -60,7 +66,27 @@
         </div>
         <p class="update_det"><?php error_reporting(0);
             if($_GET['status'] == 1) echo 'Test details Updated.';
-            else if($_GET['status'] == -1) echo 'There was an error in updating the details.';?></p>
+            else if($_GET['status'] == -1) echo 'There was an error in updating the details.';?>
+        </p>
+
+        <div class="registered">
+            <?php
+                if($r['State'] == 1){
+                    $t_name = $id . '_test';
+                    $q = "SELECT Name, Email, Score FROM $t_name";
+                    if($ress = mysqli_query($conn,$q)){
+                        echo '<table><tr><th colspan=3 style="text-align:center">Registered Students</th></tr>';
+                        echo '<tr><th>Name</th><th>Email</th><td>Score</td></tr>';
+                        while($roww = mysqli_fetch_assoc($ress))
+                            echo '<tr><td class="r_name">'.$roww['Name'].'</td><td class="r_email">'.$roww['Email'].'</td><td>'.$roww['Score'].'</td></tr>';
+                        echo '</table>';
+                    }
+                    else echo mysqli_error($conn);                    
+                }
+                 
+                
+            ?>
+        </div>
 
         <script>
             document.querySelector(".edit").addEventListener("click" , () => {

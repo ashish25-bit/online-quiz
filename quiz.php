@@ -7,7 +7,7 @@
     <style>
     *{margin:0;padding:0;}
     .start{text-align:center;}
-    .quiz_start{cursor:pointer;}
+    .quiz_start{margin:0 5px;font-size:15px; cursor:pointer;background:black;color:white;padding:6px 5px;border:none;font-family: 'Poppins', sans-serif;}
     .quiz_con{width:100%;}
     .ques_con,.pagination{background:#ccc;width:80%;margin:20px auto;padding:10px;}
     .pagination{background:white;text-align:center;}
@@ -15,11 +15,13 @@
     .option{margin:10px 0;cursor:pointer;}
     .title{text-align:center;font-size:20px;margin:10px;}
     .page_con{list-style:none;}
-    .page_con li{display:inline-block;background:#ccc;margin:0 5px;padding:10px 15px;border-radius:50%;cursor:pointer;}
+    .page_con li{display:inline-block;background:#ccc;margin:0 5px;padding:10px 18px;border-radius:50%;cursor:pointer;}
+    .finish{text-align:center;}
+    .finish_btn{font-size:15px;outline:none;cursor:pointer;color:white;background:black;padding:6px 5px;border:none;font-family: 'Poppins', sans-serif;}
     </style>
 </head>
 <body>
-    <?php require 'header.php' ; $id = $_GET['id']?>
+    <?php require 'include/information.php' ; $id = $_GET['id']?>
 
     <?php 
         $q_name = "SELECT Title FROM `exam_det` WHERE UniqueId = '$id'";
@@ -49,11 +51,11 @@
                 $query = "SELECT Ques,Option1,Option2,Option3,Option4 FROM `$id` WHERE Id = $qid[0]";
                 if($res = mysqli_query($conn, $query)){
                     $row = mysqli_fetch_assoc($res);
-                    echo '<p class="ques">' . $row['Ques'] .'</p>';
-                    echo '<input type="radio" class="option" name="option" value="' . $row['Option1'] .'">'.$row['Option1'].'<br/>';
-                    echo '<input type="radio" class="option" name="option" value="' . $row['Option2'] .'">'.$row['Option2'].'<br/>';
-                    echo '<input type="radio" class="option" name="option" value="' . $row['Option3'] .'">'.$row['Option3'].'<br/>';
-                    echo '<input type="radio" class="option" name="option" value="' . $row['Option4'] .'">'.$row['Option4'];
+                    echo '<p class="ques">Ques : ' . $row['Ques'] .'</p>';
+                    echo 'A : <input type="radio" class="option" name="option" value="' . $row['Option1'] .'"> '.$row['Option1'].'<br/>';
+                    echo 'B : <input type="radio" class="option" name="option" value="' . $row['Option2'] .'">'.$row['Option2'].'<br/>';
+                    echo 'C : <input type="radio" class="option" name="option" value="' . $row['Option3'] .'">'.$row['Option3'].'<br/>';
+                    echo 'D : <input type="radio" class="option" name="option" value="' . $row['Option4'] .'">'.$row['Option4'];
                 }
             ?>
         </div>
@@ -65,6 +67,7 @@
                 echo '</ul>';
             ?>
         </div>
+        <div class="finish"><button class="finish_btn">Finish</button></div>
     </div>
 
     <script>
@@ -73,22 +76,7 @@
         l = '<?php echo count($qid) ?>'
         qid = <?php echo json_encode($qid) ?>
 
-        {//document.querySelector('.quiz_con').style.display = 'none'
-            if(window.XMLHttpRequest)
-                xmlhttp = new XMLHttpRequest()
-            else 
-                xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
-            xmlhttp.onreadystatechange = function(){
-                if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
-                    ans = xmlhttp.responseText
-                    sessionStorage.Ans = ans
-                }
-            }
-            xmlhttp.open('GET', `include/getans.php?id=${id}`)
-            xmlhttp.send()
-            
-            current_ques(0)
-        }
+        {document.querySelector('.quiz_con').style.display = 'none'}
 
         document.querySelector('.quiz_start').addEventListener('click' , () => {
             if(window.XMLHttpRequest)
@@ -96,7 +84,7 @@
             else
                 xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
             
-            xmlhttp.onreadystatechange = function(){
+            xmlhttp.onreadystatechange = function() {
                 if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
                     console.log(xmlhttp.responseText)
                 }
@@ -106,7 +94,21 @@
             xmlhttp.send()
 
             document.querySelector('.start').style.display = 'none'
-            //document.querySelector('.quiz_con').style.display = 'block'
+            document.querySelector('.quiz_con').style.display = 'block'
+
+            if(window.XMLHttpRequest)
+                xmlhttp = new XMLHttpRequest()
+            else 
+                xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
+            xmlhttp.onreadystatechange = function(){
+                if(xmlhttp.readyState == 4 && xmlhttp.status == 200){
+                    ans = xmlhttp.responseText
+                    sessionStorage.Ans = ans
+                    current_ques(0)
+                }
+            }
+            xmlhttp.open('GET', `include/getans.php?id=${id}`)
+            xmlhttp.send()
         })
 
         document.querySelectorAll('.page_con li').forEach((element,index) => {
@@ -162,6 +164,13 @@
                 })
             }) 
         }        
+
+        document.querySelector('.finish_btn').addEventListener('click' , () => {
+            if(confirm('Do you want to finish your exam and submit your answers?')) {
+                sessionStorage.clear()
+                location.replace('include/finish_exam.php?id=' + id)
+            }
+        })
          
     </script>
 

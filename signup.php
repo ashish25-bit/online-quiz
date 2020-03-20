@@ -7,12 +7,12 @@
             body{color:white}
             body,.btn{font-family: 'Poppins', sans-serif;}
             a{text-decoration:none;}
-            .container{background-image: linear-gradient(90deg,blue, #1d1535);width:100%;height:100vh;}
+            .container{background:#202556;width:100%;height:100vh;}
             .signup_form_con{text-align:center;position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:450px;background:#25295b;padding:20px;border-radius:60px;box-shadow:3px 3px 3px black, -2px -2px 3px white;}
             .header{color:white;margin:10px 0;}
             .name,.email,.pwd{width:350px;margin:10px 0;padding:8px;outline:none;border-radius:50px;border:1px #ccc solid;}
             .btn{margin:20px;width:360px;background:#237194;padding:5px;border-radius:50px;border:none;cursor:pointer;color:white;letter-spacing:1.4px;}
-            .signup{background:#787a87;color:white;padding:5px;}
+            .signup{color:#787a87;padding:5px;}
             </style>
         <script>
             function findEmail(){
